@@ -1,0 +1,30 @@
+{
+  "cloudflare_zone_id": "de6c24854bcdec7289b8b343591a9f2d",
+  "cloudflare_api_token": "1tZ3IIBiCKOvwy-p5RdsauRMRUMm4mjDH_B5HXd7",
+  "dns_records": [
+    {
+      "record_name": "rpd"
+    },
+    {
+      "record_name": "www"
+    },
+    {
+      "record_name": "mail"
+    },
+    {
+      "record_name": "pc_ryzen"
+    },
+    {
+      "record_name": "ssh"
+    },
+    {
+      "record_name": "webmail"
+    },
+    {
+      "record_name": "wireguard"
+    },
+    {
+      "record_name": "aapanel"
+    }
+  ]
+}
