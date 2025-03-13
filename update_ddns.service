@@ -1,0 +1,12 @@
+[Unit]
+Description=Update Cloudflare DDNS
+
+[Service]
+ExecStart=/home/x79/update_cloudflare_ddns/dist/update_ddns
+WorkingDirectory=/home/x79/update_cloudflare_ddns
+User=root
+Group=root
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

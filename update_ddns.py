@@ -3,6 +3,7 @@ import json
 import os
 import logging
 import socket
+import time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -123,37 +124,41 @@ def main():
     zone_id = config.get("cloudflare_zone_id")
     api_token = config.get("cloudflare_api_token")
     dns_records = config.get("dns_records", [])
+    update_interval = config.get("update_interval", 900)  # Default to 15 minutes if not specified
     domain_name = "victorphan.net"  # Add your domain name here
 
     if not all([zone_id, api_token, dns_records]):
         logging.error("Missing required configuration values in config.json.")
         return
 
-    public_ip = get_public_ip()
+    while True:
+        public_ip = get_public_ip()
+        if public_ip:
+            for record in dns_records:
+                subdomain = record.get("record_name")
+                record_name = f"{subdomain}.{domain_name}"
 
-    if public_ip:
-        for record in dns_records:
-            subdomain = record.get("record_name")
-            record_name = f"{subdomain}.{domain_name}"
+                if not subdomain:
+                    logging.error("Missing record_name in config.json dns_records.")
+                    continue
 
-            if not subdomain:
-                logging.error("Missing record_name in config.json dns_records.")
-                continue
+                record_id = get_record_id(zone_id, api_token, record_name)
 
-            record_id = get_record_id(zone_id, api_token, record_name)
+                if not record_id:
+                    continue
 
-            if not record_id:
-                continue
-
-            try:
-                current_dns_ip = socket.gethostbyname(record_name)
-                if current_dns_ip != public_ip:
+                try:
+                    current_dns_ip = socket.gethostbyname(record_name)
+                    if current_dns_ip != public_ip:
+                        update_cloudflare_dns(zone_id, record_id, record_name, public_ip, api_token)
+                    else:
+                        logging.info(f"IP address has not changed for {record_name}. Current IP: {public_ip}")
+                except socket.gaierror:
+                    logging.error(f"Could not resolve {record_name}. Attempting to update anyway.")
                     update_cloudflare_dns(zone_id, record_id, record_name, public_ip, api_token)
-                else:
-                    logging.info(f"IP address has not changed for {record_name}. Current IP: {public_ip}")
-            except socket.gaierror:
-                logging.error(f"Could not resolve {record_name}. Attempting to update anyway.")
-                update_cloudflare_dns(zone_id, record_id, record_name, public_ip, api_token)
+
+        logging.info(f"Sleeping for {update_interval} seconds before next update.")
+        time.sleep(update_interval)
 
 if __name__ == "__main__":
     main()
