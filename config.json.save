@@ -1,6 +1,7 @@
 {
   "cloudflare_zone_id": "de6c24854bcdec7289b8b343591a9f2d",
   "cloudflare_api_token": "1tZ3IIBiCKOvwy-p5RdsauRMRUMm4mjDH_B5HXd7",
+  "update_interval": 900,
   "dns_records": [
     {
       "record_name": "rpd"
@@ -22,6 +23,12 @@
     },
     {
       "record_name": "wireguard"
+    },
+    {
+      "record_name": "board"
+    },
+    {
+      "record_name": ""
     },
     {
       "record_name": "aapanel"
