@@ -23,6 +23,15 @@ def read_config(config_file_path):
         logging.error(f"An error occurred while reading the configuration file: {e}")
         return None
 
+def write_config(config_file_path, config):
+    """Writes a JSON configuration file."""
+    try:
+        with open(config_file_path, 'w') as f:
+            json.dump(config, f, indent=4)
+        logging.info(f"Configuration file updated: {config_file_path}")
+    except Exception as e:
+        logging.error(f"An error occurred while writing the configuration file: {e}")
+
 def get_public_ip():
     """Retrieves the public IP address."""
     try:
@@ -32,6 +41,41 @@ def get_public_ip():
     except requests.exceptions.RequestException as e:
         logging.error(f"Error getting public IP: {e}")
         return None
+
+def get_all_a_records(zone_id, api_token):
+    """Retrieves all A records from Cloudflare."""
+    url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records?type=A"
+    headers = {
+        "Authorization": f"Bearer {api_token}",
+        "Content-Type": "application/json",
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        records = response.json().get("result", [])
+        return records
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error retrieving DNS records: {e}")
+        return []
+    except json.JSONDecodeError:
+        logging.error("Invalid JSON response from Cloudflare API.")
+        return []
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")
+        return []
+
+def update_config_with_a_records(config_file_path, zone_id, api_token):
+    """Updates the configuration file with all A records from Cloudflare."""
+    config = read_config(config_file_path)
+    if not config:
+        return
+
+    records = get_all_a_records(zone_id, api_token)
+    dns_records = [{"record_name": record["name"].split('.')[0]} for record in records]
+    config["dns_records"] = dns_records
+
+    write_config(config_file_path, config)
 
 def get_record_id(zone_id, api_token, record_name):
     """Retrieves the Cloudflare DNS record ID for a given record name."""
@@ -130,6 +174,9 @@ def main():
     if not all([zone_id, api_token, dns_records]):
         logging.error("Missing required configuration values in config.json.")
         return
+
+    # Update the configuration file with all A records from Cloudflare
+    update_config_with_a_records(config_file_path, zone_id, api_token)
 
     while True:
         public_ip = get_public_ip()

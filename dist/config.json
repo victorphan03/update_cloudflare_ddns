@@ -10,16 +10,10 @@
       "record_name": "www"
     },
     {
-      "record_name": "mail"
-    },
-    {
       "record_name": "pc_ryzen"
     },
     {
       "record_name": "ssh"
-    },
-    {
-      "record_name": "webmail"
     },
     {
       "record_name": "wireguard"
@@ -28,13 +22,16 @@
       "record_name": "board"
     },
     {
-      "record_name": "kodoo"
+      "record_name": "books"
     },
     {
       "record_name": "kuma"
     },
     {
       "record_name": "portainer"
+    },
+    {
+      "record_name": "zabbix"
     },
     {
       "record_name": "aapanel"

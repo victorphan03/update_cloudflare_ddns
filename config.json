@@ -1,31 +1,43 @@
 {
-  "cloudflare_zone_id": "de6c24854bcdec7289b8b343591a9f2d",
-  "cloudflare_api_token": "1tZ3IIBiCKOvwy-p5RdsauRMRUMm4mjDH_B5HXd7",
-  "update_interval": 900,
-  "dns_records": [
-    {
-      "record_name": "rpd"
-    },
-    {
-      "record_name": "www"
-    },
-    {
-      "record_name": "mail"
-    },
-    {
-      "record_name": "pc_ryzen"
-    },
-    {
-      "record_name": "ssh"
-    },
-    {
-      "record_name": "webmail"
-    },
-    {
-      "record_name": "wireguard"
-    },
-    {
-      "record_name": "aapanel"
-    }
-  ]
+    "cloudflare_zone_id": "de6c24854bcdec7289b8b343591a9f2d",
+    "cloudflare_api_token": "1tZ3IIBiCKOvwy-p5RdsauRMRUMm4mjDH_B5HXd7",
+    "update_interval": 900,
+    "dns_records": [
+        {
+            "record_name": "aapanel"
+        },
+        {
+            "record_name": "board"
+        },
+        {
+            "record_name": "books"
+        },
+        {
+            "record_name": "kuma"
+        },
+        {
+            "record_name": "mail"
+        },
+        {
+            "record_name": "pc_ryzen"
+        },
+        {
+            "record_name": "portainer"
+        },
+        {
+            "record_name": "rpd"
+        },
+        {
+            "record_name": "ssh"
+        },
+        {
+            "record_name": "wireguard"
+        },
+        {
+            "record_name": "www"
+        },
+        {
+            "record_name": "zabbix"
+        }
+    ]
 }
